@@ -43,7 +43,29 @@
 	 		$(window.parent.frames["rightFrame"].document.location).attr("href","../product/listProduct?menu=manage");
 		});
 	 	
-	 	$( ".Depth03:contains('최근')" ).on("click" , function() {
+	 	$( ".Depth03:contains('판매상품관리')" ).on("click" , function() {
+			//alert(  $( ".Depth03:contains('판매상품관리')" ) );
+	 		$(window.parent.frames["rightFrame"].document.location).attr("href","../product/listProduct?menu=manage");
+		});
+	 	
+	 
+	 	
+	 	$( ".Depth03:contains('상 품 검 색')" ).on("click" , function() {
+			//alert(  $( ".Depth03:contains('판매상품관리')" ) );
+	 		$(window.parent.frames["rightFrame"].document.location).attr("href","../product/listProduct?menu=search");
+		});
+		
+		$( '#purchaseList' ).on("click" , function() {
+			//alert(  $( ".Depth03:contains('판매상품관리')" ) );
+	 		$(window.parent.frames["rightFrame"].document.location).attr("href","../purchase/listPurchase");
+		});
+	 	
+	 	$( ".Depth03" ).eq(5).on("click" , function() { 
+			//alert(  $( ".Depth03:contains('판매상품관리')" ) );
+	 		$(window.parent.frames["rightFrame"].document.location).attr("href","../purchase/listPurchase");
+		});
+	 	
+	 	$( ".Depth03:contains('최근 본 상품')" ).on("click" , function() {
 	 		history();
 		});
 	 	
@@ -114,15 +136,15 @@
 	<table  border="0" cellspacing="0" cellpadding="0" width="159">
 		<tr>
 			<td class="Depth03">
-				<a href="../product/listProduct?menu=search" target="rightFrame">상 품 검 색</a>
+				상 품 검 색
 			</td>
 		</tr>
 		
 		<c:if test ="${!(empty user)}">
 			
 			<tr>
-				<td class="Depth03">
-					<a href="../purchase/listPurchase" target="rightFrame">${user.role eq 'admin'?'주 문 관 리':'구매이력조회' }</a>
+				<td class="Depth03" id="purchaseList">
+					${user.role eq 'admin'?'주 문 관 리':'구매이력조회' }
 				</td>
 			</tr>
 			
@@ -132,7 +154,7 @@
 		</tr>
 		<tr>
 			<td class="Depth03">
-				최근 본 상품
+			최근 본 상품
 			</td>
 		</tr>
 	</table>

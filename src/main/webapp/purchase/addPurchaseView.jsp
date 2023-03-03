@@ -8,8 +8,8 @@
 
 <title>Insert title here</title>
 
-<script type="text/javascript" src="../javascript/calendar.js">
-</script>
+<script type="text/javascript" src="../javascript/calendar.js"></script>
+<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 
 <script type="text/javascript">
 <!--
@@ -18,6 +18,19 @@ function fncAddPurchase(prodNo) {
 	document.addPurchase.submit();
 }
 -->
+
+$(function () {
+	
+	$('.ct_btn01:contains("구매")').on("click", function(){
+		$('#prodNo').val('${param.prodNo}')
+		$('form').attr('method','post').attr('action','addPurchase').submit();
+	});
+	
+	$('.ct_btn01:contains("취소")').on("click", function(){
+		history.go(-1);
+	});
+	
+});
 </script>
 </head>
 
@@ -175,7 +188,7 @@ function fncAddPurchase(prodNo) {
 		<td width="104" class="ct_write">구매자주소</td>
 		<td bgcolor="D6D6D6" width="1"></td>
 		<td class="ct_write01">
-			<input 	type="text" name="receiverAddr" class="ct_input_g" 
+			<input 	type="text" name="divyAddr" class="ct_input_g" 
 							style="width: 100px; height: 19px" maxLength="20" 	value="${user.addr}" />
 		</td>
 	</tr>
@@ -186,7 +199,7 @@ function fncAddPurchase(prodNo) {
 		<td width="104" class="ct_write">구매요청사항</td>
 		<td bgcolor="D6D6D6" width="1"></td>
 		<td class="ct_write01">
-			<input		type="text" name="receiverRequest" 	class="ct_input_g" 
+			<input		type="text" name="divyRequest" 	class="ct_input_g" 
 							style="width: 100px; height: 19px" maxLength="20" />
 		</td>
 	</tr>
@@ -197,10 +210,10 @@ function fncAddPurchase(prodNo) {
 		<td width="104" class="ct_write">배송희망일자</td>
 		<td bgcolor="D6D6D6" width="1"></td>
 		<td width="200" class="ct_write01">
-			<input 	type="text" readonly="readonly" name="receiverDate" class="ct_input_g" 
+			<input 	type="text" readonly="readonly" name="divyDate" class="ct_input_g" 
 							style="width: 100px; height: 19px" maxLength="20"/>
 			<img 	src="../images/ct_icon_date.gif" width="15" height="15"	
-						onclick="show_calendar('document.addPurchase.receiverDate', document.addPurchase.receiverDate.value)"/>
+						onclick="show_calendar('document.addPurchase.divyDate', document.addPurchase.divyDate.value)"/>
 		</td>
 	</tr>
 	<tr>
@@ -219,7 +232,7 @@ function fncAddPurchase(prodNo) {
 					</td>
 					<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top: 3px;">
 						<input type = "hidden" id ="prodNo" name="prodNo" value = ""/>
-						<a href="javascript:fncAddPurchase('${param.prodNo }');">구매</a>
+						구매
 					</td>
 					<td width="14" height="23">
 						<img src="/images/ct_btnbg03.gif" width="14" height="23"/>
@@ -229,7 +242,7 @@ function fncAddPurchase(prodNo) {
 						<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
 					</td>
 					<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top: 3px;">
-						<a href="javascript:history.go(-1)">취소</a>
+						취소
 					</td>
 					<td width="14" height="23">
 						<img src="/images/ct_btnbg03.gif" width="14" height="23"/>

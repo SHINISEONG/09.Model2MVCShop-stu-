@@ -68,7 +68,7 @@
 </head>
 
 <body bgcolor="#ffffff" text="#000000">
-
+<c:set var = "pageType" value="user" scope="request"/>
 <div style="width:98%; margin-left:10px;">
 
 <!-- ////////////////// jQuery Event 처리로 변경됨 /////////////////////////

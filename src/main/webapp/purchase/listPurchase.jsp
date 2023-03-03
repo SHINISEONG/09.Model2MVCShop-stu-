@@ -7,6 +7,7 @@
 <title>구매 목록조회</title>
 
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
+<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 
 <script type="text/javascript">
 	function fncGetPurchaseList(currentPage, searchOrderType) {
@@ -14,6 +15,30 @@
 		document.getElementById("searchOrderType").value = searchOrderType;
 		document.detailForm.submit();
 	}
+	
+	$(function () {
+	
+		$( ".ct_list_pop td:nth-child(1)" ).on("click" , function() {
+			self.location ="getPurchase?tranNo="+$(this).text().trim();
+		});
+		
+		$( ".ct_list_pop td:nth-child(3)" ).on("click" , function() {
+			self.location ="../user/getUser?userId="+$(this).text().trim();
+		});
+		
+		$( "td:contains('배송하기')" ).on("click" , function() {
+			alert($( "td:contains('배송하기')" ).html());
+			alert($(this).children('input:hidden').val());
+			self.location ="updateTranCode?tranNo="+$(this).children('input:hidden').val()+"&tranCode=2&page=${resultPage.currentPage}";
+		});
+		
+		$( "td:contains('물건도착')" ).on("click" , function() {
+			self.location ="updateTranCode?tranNo="+$(this).children('input:hidden').val()+"&tranCode=3&page=${resultPage.currentPage}";
+		});
+		
+		
+	});
+	
 </script>
 </head>
 
@@ -123,12 +148,11 @@
 			<c:set var = "i" value = "${i+1}"/>
 		<tr class="ct_list_pop">
 		<td align="center">
-			
-			<a href="getPurchase?tranNo=${purchase.tranNo}">${purchase.tranNo}</a>
+			${purchase.tranNo}
 		</td>
 		<td></td>
 		<td align="left">
-			<a href="../user/getUser?userId=${purchase.buyer.userId}">${purchase.buyer.userId}</a>
+			${purchase.buyer.userId}
 		</td>
 		<td></td>
 		<td align="left">${purchase.receiverName}</td>
@@ -160,10 +184,12 @@
 		<td></td> 
    		<td align="left">
 		<c:if test = "${purchase.tranCode eq '1' && user.role eq 'admin' }">
-			<a href="updateTranCode?tranNo=${purchase.tranNo}&tranCode=2&page=${resultPage.currentPage}">배송하기</a>
+			<input type="hidden" value= "${purchase.tranNo}"/>
+			배송하기
 		</c:if>
 		<c:if test = "${purchase.tranCode eq '2' && user.role eq 'user'}">
-			<a href="updateTranCode?tranNo=${purchase.tranNo}&tranCode=3&page=${resultPage.currentPage}">물건도착</a>
+			<input type="hidden" value= "${purchase.tranNo}"/>
+			물건도착
 		</c:if>
 		</td>
 	</tr>

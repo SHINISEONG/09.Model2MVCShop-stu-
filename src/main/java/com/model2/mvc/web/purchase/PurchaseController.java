@@ -73,6 +73,7 @@ public class PurchaseController {
 		
 		purchase.setPurchaseProd(product);
 		purchase.setBuyer((User)session.getAttribute("user"));
+		purchase.setTranCode("1");
 		
 		purchaseService.addPurchase(purchase);
 		ModelAndView modelAndView = new ModelAndView();
@@ -177,7 +178,7 @@ public class PurchaseController {
 		purchaseService.updateTranCode(purchase);
 		
 		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("forward:/listPurchase.do?&currentPage="+currentPage);
+		modelAndView.setViewName("forward:listPurchase?&currentPage="+currentPage);
 		return modelAndView;
 	}
 	

@@ -7,12 +7,12 @@
 
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
 
-<script type="text/javascript" src="../javascript/calendar.js">
-</script>
+<script type="text/javascript" src="../javascript/calendar.js"></script>
+<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 
 <script type="text/javascript">
 <!--
-function fncAddProduct(){
+function fncUpdateProduct(){
 	//Form 유효성 검증
 	var name = document.detailForm.prodName.value;
 	var detail = document.detailForm.prodDetail.value;
@@ -38,25 +38,48 @@ function fncAddProduct(){
 		
 	document.detailForm.action='updateProduct';
 	document.detailForm.submit();
+	$('form').attr('action','updateProduct').attr('method','post').attr('enctype','multipart/form-data').submit();
 }
 
-function fncAddCart(){
-	
-	document.detailForm.action='../purchase/addCart';
-	document.detailForm.submit();
-}
 
 function resetData(){
-	document.detailForm.reset();
+	$('form').reset();
 }
 -->
+//attr('enctype','multipart/form-data');
+$(function () {
+	
+	$('.ct_btn01:contains("장바구니")').on('click',function(){
+		$('form').attr('action','../purchase/addCart').attr('method','post').submit();
+	});
+	
+	$('.ct_btn01:contains("수정")').on('click',function(){
+		fncUpdateProduct();
+	});
+	
+	$('.ct_btn01:contains("구매")').on('click',function(){
+		$('form').attr('action','../purchase/addPurchase?prodNo=${product.prodNo }').attr('method','get').submit();
+	});
+	
+	$('.ct_btn01:contains("확인")').on('click',function(){
+		$('form').attr('action','listProduct?menu=manage').attr('method','post').submit();
+	});
+	
+	$('.ct_btn01:contains("취소")').on('click',function(){
+		$('form').attr('action','listProduct?menu=manage').attr('method','post').submit();
+	});
+	
+	$('.ct_btn01:contains("이전")').on('click',function(){
+		history.go(-1)
+	});
+})
 </script>
 </head>
 
 <body bgcolor="#ffffff" text="#000000">
 
 
-<form name="detailForm" method="post" enctype="multipart/form-data">
+<form name="detailForm">
 
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
 	<tr>
@@ -233,9 +256,7 @@ function resetData(){
 			<td width="104" class="ct_write">상품이미지</td>
 			<td bgcolor="D6D6D6" width="1"></td>
 			<td class="ct_write01">
-				<input type="file" name="file"  class="ct_input_g"	style="width: 100px; height: 19px" maxLength="20">
 				<input type="file" name="files"  multiple="multiple" class="ct_input_g"	style="width: 100px; height: 19px" maxLength="20">
-				<input type="hidden" name="fileName"  value="${product.fileName}">
 			</td>
 		</tr>
 		
@@ -295,7 +316,7 @@ function resetData(){
 					
 					<td background="/images/ct_btnbg02.gif" class="ct_btn01"  style="padding-top: 3px;">
 						<input type = "hidden" name = "prodNo" value = "${param.prodNo }"/>
-						<a href="javascript:fncAddCart();">장바구니에 담기</a>
+						장바구니에 담기
 					</td>
 					<td width="14" height="23">
 						<img src="/images/ct_btnbg03.gif" width="14" height="23"/>
@@ -313,10 +334,10 @@ function resetData(){
 						<c:when test = "${param.menu eq 'manage'}">
 							<input type = "hidden" name = "prodNo" value = "${param.prodNo }"/>
 							<input type = "hidden" name = "menu" value = "search"/>
-							<a href="javascript:fncAddProduct();">수정</a>
+							수정
 						</c:when>
 						<c:when test = "${param.menu eq 'search' && !(user.role eq 'admin')}">
-							<a href="../purchase/addPurchase?prodNo=${product.prodNo }">구매</a>
+							구매
 						</c:when>
 					</c:choose>
 					</td>
@@ -331,7 +352,7 @@ function resetData(){
 					<td background="/images/ct_btnbg02.gif" class="ct_btn01"	 style="padding-top: 3px;">
 					
 					
-						<a href="javascript:history.go(-1)">
+						
 						<c:choose>
 							<c:when test = "${param.menu eq 'manage'}">
 								취소
@@ -340,12 +361,12 @@ function resetData(){
 								이전
 							</c:when>
 						</c:choose>
-						</a>
+						
 					</td>
 				</c:when>
 				<c:when test = "${param.updateChecker}">
 					<td background="/images/ct_btnbg02.gif" class="ct_btn01"  style="padding-top: 3px;">
-					<a href="listProduct?menu=manage">확인</a>
+						확인
 					</td>
 				</c:when>
 				</c:choose>

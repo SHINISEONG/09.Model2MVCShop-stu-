@@ -7,9 +7,10 @@
 
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
 
-<script type="text/javascript" src="../javascript/calendar.js">
-</script>
 
+
+<script type="text/javascript" src="../javascript/calendar.js"></script>
+<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
 <!--
 function fncAddProduct(){
@@ -36,14 +37,32 @@ function fncAddProduct(){
 		return;
 	}
 
-	document.detailForm.action='addProduct';
-	document.detailForm.submit();
+	
+	$('form').attr('method','post').attr('enctype','multipart/form-data').attr('action','addProduct?menu=manage').submit();
 }
 
 function resetData(){
 	document.detailForm.reset();
 }
 -->
+
+$(function () {
+	$('.ct_btn01:nth-child(2)').on('click',function(){
+		console.log($('.ct_btn01:nth-child(2)').html());
+		fncAddProduct();	
+	})
+	
+	$("ct_btn01:contains('취소')").on('click',function(){
+		resetData();
+	})
+	
+	$("ct_btn01:contains('취소')").on('click',function(){
+		resetData();
+	})
+	
+	//../product/addProductView.jsp
+})
+
 </script>
 </head>
 
@@ -231,7 +250,7 @@ function resetData(){
 				<td background="/images/ct_btnbg02.gif" class="ct_btn01"  style="padding-top: 3px;">
 				<c:choose>
 					<c:when test = "${empty product }">
-						<a href="javascript:fncAddProduct();">등록</a>
+						등록
 					</c:when>
 					<c:when test = "${!empty product }">
 					<a href="listProduct?menu=manage">확인</a>
@@ -250,11 +269,11 @@ function resetData(){
 				
 				<c:choose>
 					<c:when test = "${empty product }">
-						<a href="javascript:resetData();">취소</a>
+						취소
 					</c:when>
 					
 					<c:when test = "${!empty product }">
-						<a href="../product/addProductView.jsp;">추가등록</a>
+						추가등록
 					</c:when>
 				</c:choose>
 				</td>

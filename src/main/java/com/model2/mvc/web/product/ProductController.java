@@ -115,19 +115,21 @@ public class ProductController {
 								@RequestParam("menu") String menu,
 								@RequestParam("file") MultipartFile file,
 								MultipartHttpServletRequest files) throws Exception {
-		product.setFileName(file.getOriginalFilename());
 		
-		List<MultipartFile> fileList = files.getFiles("files");
-		String filename = "";
-		System.out.println(fileList.size()+"이녀석은 하나만 파일을 받을떄 싸이즈를 확인하기 위한 씨쓰아웃이다 씨밸");
-	
-		for(int i = 0; i<fileList.size(); i++) {
-			String ext = fileList.get(i).getOriginalFilename().substring(fileList.get(i).getOriginalFilename().lastIndexOf("."));
-			fileList.get(i).transferTo(new File(fileUploadPath+(UUID.randomUUID().toString()+ext)));
-			filename += (i!=0)?(","+(fileList.get(i).getOriginalFilename())):(fileList.get(i).getOriginalFilename());
+		if(files != null) {
+			product.setFileName(file.getOriginalFilename());
+			
+			List<MultipartFile> fileList = files.getFiles("files");
+			String filename = "";
+		
+			for(int i = 0; i<fileList.size(); i++) {
+				String ext = fileList.get(i).getOriginalFilename().substring(fileList.get(i).getOriginalFilename().lastIndexOf("."));
+				fileList.get(i).transferTo(new File(fileUploadPath+(UUID.randomUUID().toString()+ext)));
+				filename += (i!=0)?(","+(fileList.get(i).getOriginalFilename())):(fileList.get(i).getOriginalFilename());
+			}
+			
+			product.setFileName(filename);
 		}
-		
-		product.setFileName(filename);
 		
 		productService.updateProduct(product);
 		boolean updateChecker = true;

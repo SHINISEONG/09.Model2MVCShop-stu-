@@ -11,23 +11,40 @@
 
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
 
+<script src="https://code.jquery.com/jquery-3.6.3.min.js" type="text/javascript"></script>
 <script type="text/javascript">
-	// 검색 / page 두가지 경우 모두 Form 전송을 위해 JavaScrpt 이용  
+
 	function fncGetProductList(currentPage, searchOrderType, menu) {
-		document.getElementById("currentPage").value = currentPage;
-		document.getElementById("menu").value = menu;
-		document.getElementById("searchOrderType").value = searchOrderType;
+		$("#currentPage").val(currentPage);
+		$("menu").val(menu);
+		$("searchOrderType").val(searchOrderType);
 	   	document.detailForm.submit();		
 	}
 	
-	function fncUpdateTranCodeByProd( currentPage, menu, prodNo, tranCode) {
-		document.getElementById("currentPage").value = currentPage;
-		document.getElementById("menu").value = menu;
-		document.getElementById("prodNo").value = prodNo;
-		document.getElementById("tranCode").value = tranCode;
-		document.detailForm.action='updateTranCodeByProd';
-	   	document.detailForm.submit();		
-	}
+	
+	$(function () {
+		 
+		$( "td.ct_btn01:contains('검색')" ).on("click" , function() {
+			//Debug..
+			//alert(  $( "td.ct_btn01:contains('검색')" ).html() );
+			fncGetProductList(1, ${search.searchOrderType}, ${param.menu});
+		});
+		
+		$( ".clickable:nth-child(3)" ).on("click" , function() {
+			//Debug..
+			//alert(  $( this ).text().trim() );
+			self.location ="/product/getProduct?prodNo="+$(this).children('input:hidden').val()+"&menu=${param.menu}";
+		});
+		
+		
+		
+		$( ".clickable:nth-child(3)" ).css("color" , "red");
+		$("h7").css("color" , "red");
+		
+		$(".ct_list_pop:nth-child(${search.pageSize+1}n+7)" ).css("background-color" , "whitesmoke");
+		
+	});
+	
 </script>
 
 </head>
@@ -54,7 +71,7 @@
 						</c:when>
 		
 						<c:when test = "${param.menu eq 'search'}">
-						상품 목록조회
+							상품 목록조회
 						</c:when>
 					</c:choose>
 					</td>
@@ -116,7 +133,7 @@
 	
 	<tr>
 		<td align="right">
-			<input type="hidden" id="searchOrderType" name="searchOrderType" value="">
+			<input type="hidden" id="searchOrderType" name="searchOrderType" value="${param.menu}">
 		</td>
 		
 		<jsp:include page="../common/searchOrderTypeNavigator.jsp"/>
@@ -149,23 +166,31 @@
 	<tr class="ct_list_pop">
 		<td align="center">${i }</td>
 		<td></td>
-			<td align="left">
+			
 				<c:choose>
-					<c:when test = "${product.stock > 0}">
-						<a href="getProduct?prodNo=${product.prodNo}&menu=${param.menu}"> ${product.prodName}</a>
+					<c:when test = "${(user.role eq 'user') && (product.stock > 0)}">
+						<td class ='clickable' id = 'purchase' align="left">
+							<input type = 'hidden' value = '${product.prodNo}' />
+							${product.prodName}
+						</td>
 					</c:when>
 					<c:otherwise>
 						<c:choose>
 							<c:when test = "${user.role eq 'admin'}">
-								<a href="getProduct?prodNo=${product.prodNo }&menu=${param.menu}">${product.prodName}</a>
+								<td class ='clickable' id = 'updateProduct' align="left">
+									<input type = 'hidden' value = '${product.prodNo}' />
+									${product.prodName}
+								</td>
 							</c:when>
 							<c:otherwise>
-								${product.prodName }
+								<td align="left">
+									${product.prodName }
+								</td>
 							</c:otherwise>
 						</c:choose>
 					</c:otherwise>
 				</c:choose>
-			</td>
+			
 		
 		<td></td>
 		<td align="left">${product.price }</td>
@@ -226,6 +251,7 @@
 			<input type="hidden" id="menu" name="menu" value=""/>
 			
 			<jsp:include page="../common/pageNavigator.jsp"/>
+			
     	</td>
 	</tr>
 </table>
