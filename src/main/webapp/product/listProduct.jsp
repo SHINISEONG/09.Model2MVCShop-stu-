@@ -11,7 +11,10 @@
 
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
 
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
 <script src="https://code.jquery.com/jquery-3.6.3.min.js" type="text/javascript"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 <script type="text/javascript">
 
 	function fncGetProductList(currentPage, searchOrderType, menu) {
@@ -43,6 +46,65 @@
 		
 		$(".ct_list_pop:nth-child(${search.pageSize+1}n+7)" ).css("background-color" , "whitesmoke");
 		
+		$( '.ct_list_pop td:nth-child(3)' ).tooltip({
+	        content: function() {
+	        	$.ajax( 
+						{
+							url : "/json/product/getProduct/"+$(this).children('input:hidden').val() ,
+							method : "GET" ,
+							dataType : "json" ,
+							headers : {
+								"Accept" : "application/json",
+								"Content-Type" : "application/json"
+							},
+							success : function(JSONData , status) {
+		
+								//Debug...
+								//alert(status);
+								//Debug...
+								//alert("JSONData : \n"+JSONData);
+								//alert("JSONData : \n"+JSON.stringify(JSONData));
+								var detail=	JSONData.prodDetail;
+								//alert(detail);
+								
+								//Debug...									
+								//alert(displayValue);
+								return detail;
+							}
+					}
+				);
+	        }
+	    });
+		/*
+		$( '.ct_list_pop td:nth-child(3)' ).mouseover( function() {
+			$.ajax( 
+					{
+						url : "/json/product/getProduct/"+$(this).children('input:hidden').val() ,
+						method : "GET" ,
+						dataType : "json" ,
+						headers : {
+							"Accept" : "application/json",
+							"Content-Type" : "application/json"
+						},
+						success : function(JSONData , status) {
+	
+							//Debug...
+							//alert(status);
+							//Debug...
+							//alert("JSONData : \n"+JSONData);
+							//alert("JSONData : \n"+JSON.stringify(JSONData));
+							var detail=	JSONData.prodDetail;
+							//alert(detail);
+							
+							//Debug...									
+							//alert(displayValue);
+							$( this ).attr('title',detail);
+						}
+				}
+			);
+		});
+		*/
+			
 	});
 	
 </script>
@@ -169,7 +231,7 @@
 			
 				<c:choose>
 					<c:when test = "${(user.role eq 'user') && (product.stock > 0)}">
-						<td class ='clickable' id = 'purchase' align="left">
+						<td class ='clickable' id = 'purchase' align="left" >
 							<input type = 'hidden' value = '${product.prodNo}' />
 							${product.prodName}
 						</td>
@@ -177,13 +239,13 @@
 					<c:otherwise>
 						<c:choose>
 							<c:when test = "${user.role eq 'admin'}">
-								<td class ='clickable' id = 'updateProduct' align="left">
+								<td class ='clickable' id = 'updateProduct' align="left"  >
 									<input type = 'hidden' value = '${product.prodNo}' />
 									${product.prodName}
 								</td>
 							</c:when>
 							<c:otherwise>
-								<td align="left">
+								<td align="left" >
 									${product.prodName }
 								</td>
 							</c:otherwise>
