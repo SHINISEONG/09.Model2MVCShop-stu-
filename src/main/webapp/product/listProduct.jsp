@@ -46,40 +46,12 @@
 		
 		$(".ct_list_pop:nth-child(${search.pageSize+1}n+7)" ).css("background-color" , "whitesmoke");
 		
-		$( '.ct_list_pop td:nth-child(3)' ).tooltip({
-	        content: function() {
-	        	$.ajax( 
-						{
-							url : "/json/product/getProduct/"+$(this).children('input:hidden').val() ,
-							method : "GET" ,
-							dataType : "json" ,
-							headers : {
-								"Accept" : "application/json",
-								"Content-Type" : "application/json"
-							},
-							success : function(JSONData , status) {
 		
-								//Debug...
-								//alert(status);
-								//Debug...
-								//alert("JSONData : \n"+JSONData);
-								//alert("JSONData : \n"+JSON.stringify(JSONData));
-								var detail=	JSONData.prodDetail;
-								//alert(detail);
-								
-								//Debug...									
-								//alert(displayValue);
-								return detail;
-							}
-					}
-				);
-	        }
-	    });
-		/*
-		$( '.ct_list_pop td:nth-child(3)' ).mouseover( function() {
-			$.ajax( 
+		
+		
+		$.ajax( 
 					{
-						url : "/json/product/getProduct/"+$(this).children('input:hidden').val() ,
+						url : "/json/product/getProduct/"+$( '.ct_list_pop td:nth-child(3)' ).eq(0).children('input:hidden').val() ,
 						method : "GET" ,
 						dataType : "json" ,
 						headers : {
@@ -87,23 +59,28 @@
 							"Content-Type" : "application/json"
 						},
 						success : function(JSONData , status) {
-	
+							
 							//Debug...
 							//alert(status);
 							//Debug...
 							//alert("JSONData : \n"+JSONData);
 							//alert("JSONData : \n"+JSON.stringify(JSONData));
 							var detail=	JSONData.prodDetail;
-							//alert(detail);
+							
 							
 							//Debug...									
 							//alert(displayValue);
-							$( this ).attr('title',detail);
+							$( '.ct_list_pop td:nth-child(3)' ).eq(0).attr('title',detail);
 						}
-				}
-			);
-		});
-		*/
+					}
+			);// end of ajax
+			
+			$( '.ct_list_pop td:nth-child(3)' ).tooltip();
+		
+	
+			
+			
+		
 			
 	});
 	
@@ -231,7 +208,7 @@
 			
 				<c:choose>
 					<c:when test = "${(user.role eq 'user') && (product.stock > 0)}">
-						<td class ='clickable' id = 'purchase' align="left" >
+						<td class ='clickable' id = 'purchase' align="left"  title = "">
 							<input type = 'hidden' value = '${product.prodNo}' />
 							${product.prodName}
 						</td>
@@ -239,7 +216,7 @@
 					<c:otherwise>
 						<c:choose>
 							<c:when test = "${user.role eq 'admin'}">
-								<td class ='clickable' id = 'updateProduct' align="left"  >
+								<td class ='clickable' id = 'updateProduct' align="left"  title = "">
 									<input type = 'hidden' value = '${product.prodNo}' />
 									${product.prodName}
 								</td>

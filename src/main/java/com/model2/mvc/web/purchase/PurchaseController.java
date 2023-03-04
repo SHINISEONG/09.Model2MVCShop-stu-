@@ -23,6 +23,7 @@ import com.model2.mvc.service.domain.Purchase;
 import com.model2.mvc.service.domain.User;
 import com.model2.mvc.service.product.ProductService;
 import com.model2.mvc.service.purchase.PurchaseService;
+import com.model2.mvc.service.user.UserService;
 
 @Controller
 @RequestMapping("/purchase/*")
@@ -33,23 +34,10 @@ public class PurchaseController {
 	@Qualifier("purchaseServiceImpl")
 	private PurchaseService purchaseService;
 	
-	
 	@Autowired
 	@Qualifier("productServiceImpl")
 	private ProductService productService;
 	
-		///setter method for DI
-		public void setPurchaseService(PurchaseService purchaseService) {
-			this.purchaseService = purchaseService;
-		}
-		
-		public void setProductService(ProductService productService) {
-			this.productService = productService;
-		}
-	
-
-
-
 	@Value("#{commonProperties['pageUnit'] ?: 3}")
 	int pageUnit;
 	
@@ -67,6 +55,7 @@ public class PurchaseController {
 									@RequestParam("prodNo") int prodNo,
 									@RequestParam("quantity") int quantity,
 									HttpSession session) throws Exception {
+	
 		Product product = productService.getProduct(prodNo);
 		product.setStock(product.getStock()-quantity);
 		productService.updateProduct(product);
@@ -80,6 +69,7 @@ public class PurchaseController {
 		modelAndView.addObject("purchase", purchase);
 		modelAndView.setViewName("forward:/purchase/addPurchase.jsp");
 		return modelAndView;
+	
 	}
 	
 	@GetMapping("addPurchase")
